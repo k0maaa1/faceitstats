@@ -6,8 +6,8 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors()); // ✅ разрешает кросс-доменные запросы
 
-const API_KEY = 'ТВОЙ_FACEIT_API_KEY';
-const PLAYER_ID = 'ТВОЙ_PLAYER_ID';
+const API_KEY = 'b826b731-8156-485e-b995-8c848d71784e';
+const PLAYER_ID = 'a937e042-ad7c-4814-acd7-896ef6ddc72e';
 
 app.get('/stats', async (req, res) => {
   try {
