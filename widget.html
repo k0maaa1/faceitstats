@@ -1,0 +1,30 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body { background: transparent; color: white; font-family: sans-serif; font-size: 20px; }
+  </style>
+</head>
+<body>
+  <div id="stats">Загрузка...</div>
+
+  <script>
+    async function loadStats() {
+      const res = await fetch("https://faceitstats-mrlr.onrender.com/stats");
+      const data = await res.json();
+      document.getElementById("stats").innerHTML = `
+        K/D: ${data.kd}<br>
+        Avg Kills: ${data.avgKills}<br>
+        Win Rate: ${data.winRate}%<br>
+        HS%: ${data.hsPercent}%<br>
+        Last 10: ${data.results.slice(0,10).join(" ")}
+      `;
+    }
+
+    loadStats();
+    setInterval(loadStats, 60000); // обновление каждую минуту
+  </script>
+</body>
+</html>

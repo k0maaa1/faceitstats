@@ -1,8 +1,10 @@
-
 const express = require('express');
+const cors = require('cors');
 const axios = require('axios');
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(cors()); // ✅ разрешает кросс-доменные запросы
 
 const API_KEY = 'ТВОЙ_FACEIT_API_KEY';
 const PLAYER_ID = 'ТВОЙ_PLAYER_ID';
@@ -14,12 +16,11 @@ app.get('/stats', async (req, res) => {
       { headers: { Authorization: `Bearer ${API_KEY}` } }
     );
 
-    let totalKills = 0, totalDeaths = 0, wins = 0, hsTotal = 0, totalHSRounds = 0;
+    let totalKills = 0, totalDeaths = 0, wins = 0, hsTotal = 0;
     const results = [];
 
     for (const match of matches.data.items) {
       const matchId = match.match_id;
-
       const matchStats = await axios.get(
         `https://open.faceit.com/data/v4/matches/${matchId}/stats`,
         { headers: { Authorization: `Bearer ${API_KEY}` } }
@@ -35,7 +36,6 @@ app.get('/stats', async (req, res) => {
       totalKills += parseInt(Kills);
       totalDeaths += parseInt(Deaths);
       hsTotal += parseInt(Headshots);
-      totalHSRounds += 1;
 
       const won = round.teams.find(t => t.team_id === playerStats.team_id).team_stats.TeamWin === "1";
       if (won) wins++;
@@ -54,6 +54,7 @@ app.get('/stats', async (req, res) => {
       hsPercent,
       results
     });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch stats" });
